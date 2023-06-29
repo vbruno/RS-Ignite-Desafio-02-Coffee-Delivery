@@ -28,9 +28,9 @@ export const InputNumber = ({
 
   return (
     <InputNumberContainer>
-      <Minus className="icone" size={14} weight="bold" onClick={handleMinus} />
+      <Minus className="icon" size={14} weight="bold" onClick={handleMinus} />
       <span>{inputValue}</span>
-      <Plus className="icone" size={14} weight="bold" onClick={handlePlus} />
+      <Plus className="icon" size={14} weight="bold" onClick={handlePlus} />
     </InputNumberContainer>
   )
 }

@@ -12,7 +12,7 @@ export const InputNumberContainer = styled.div`
   border-radius: 6px;
   flex-shrink: 0;
 
-  .icone {
+  .icon {
     color: ${(props) => props.theme.purple};
 
     &:hover {
@@ -34,7 +34,7 @@ export const InputNumberContainer = styled.div`
 
     /* Text/Regular M */
     font-size: 16px;
-    font-family: Roboto;
+    font-family: roboto;
     line-height: 130%;
   }
 `
