@@ -34,7 +34,7 @@ export const InputNumberContainer = styled.div`
 
     /* Text/Regular M */
     font-size: 16px;
-    font-family: roboto;
+    font-family: 'roboto';
     line-height: 130%;
   }
 `

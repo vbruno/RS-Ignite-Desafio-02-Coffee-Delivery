@@ -5,4 +5,4 @@ export * from './buttonSelect/ButtonSelect'
 export * from './buttonState/ButtonState'
 export * from './inputNumber/InputNumber'
 
-export * from './coffeCard/catalog/CoffeeCardCatalog'
+export * from './coffeeCard/CoffeeCardCatalog'

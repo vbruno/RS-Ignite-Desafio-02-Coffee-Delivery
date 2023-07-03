@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import expresso from '../images/expresso.png'
-import { ButtonCartState, ButtonState, InputNumber } from '../..'
 import { useState } from 'react'
+import { ButtonState, InputNumber } from '..'
+import expresso from './images/expresso.png'
 
 export const CoffeeCardCatalog = () => {
   const [numberCoffee, setNumberCoffee] = useState(0)
@@ -14,9 +14,12 @@ export const CoffeeCardCatalog = () => {
       <p>Expresso Tradicional</p>
       <p>O tradicional café feito com água quente e grãos moídos</p>
       <div className="buy">
-        <span className="">R$ 9,90</span>
-        <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
-        <ButtonState />
+        <span className="">R$ <strong>9,90</strong></span>
+        <div>
+          <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
+          <ButtonState />
+
+        </div>
       </div>
     </Container>
   )
@@ -93,5 +96,34 @@ const Container = styled.main`
     justify-content: space-between;
 
     width: 208px;
+  }
+
+  .buy span {
+    color: ${({ theme }) => theme['base-text']};
+    text-align: right;
+    font-size: 14px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+  }
+
+  .buy span strong {
+    text-align: right;
+    font-size: 24px;
+    font-family: 'Baloo 2';
+    font-weight: 800;
+    line-height: 130%;
+
+  }
+
+
+  .buy div {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
   }
 `
