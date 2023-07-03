@@ -1,24 +1,39 @@
 import styled from 'styled-components'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ButtonState, InputNumber } from '..'
-import expresso from './images/expresso.png'
 
-export const CoffeeCardCatalog = () => {
+
+import { ICoffeeType, coffeeType, imgCoffee } from './coffeeType'
+
+interface ICoffeeCardCatalogProps {
+  type: 'expressoTradicional' | 'expressoAmericano' | 'expressoCremoso' | 'expressoGelado' | 'cafeComLeite' | 'latte' | 'capuccino' | 'macchiato' | 'macaccino' | 'chocolateQuente' | 'cubano' | 'havaiano' | 'arabe' | 'irlandes'
+}
+
+export const CoffeeCardCatalog = ({type}:ICoffeeCardCatalogProps) => {
   const [numberCoffee, setNumberCoffee] = useState(0)
+
+  const [coffee, setCoffee] = useState<ICoffeeType>()
+
+  useEffect(() => {
+    setCoffee(coffeeType.find((coffee) => coffee.type === type) as ICoffeeType)
+  }, [type])
+
+
 
   return (
     <Container>
-      <img src={expresso} alt="expresso" />
-      <p className="tag">Tradicional</p>
-      <p>Expresso Tradicional</p>
-      <p>O tradicional café feito com água quente e grãos moídos</p>
+      <img src={imgCoffee[type]} alt="expresso" />
+      <div className="tag">
+      {coffee?.tag.map((tag) => ( <p key={tag}>{tag}</p>))}
+      </div>
+      <p className='title'>{coffee?.title}</p>
+      <p className='content'>{coffee?.content}</p>
       <div className="buy">
-        <span className="">R$ <strong>9,90</strong></span>
+        <span className="">R$ <strong>{coffee?.price.toFixed(2)}</strong></span>
         <div>
           <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
           <ButtonState />
-
         </div>
       </div>
     </Container>
@@ -45,8 +60,14 @@ const Container = styled.main`
     margin-top: -20px;
   }
 
-  p:nth-child(2) {
+  .tag {
     margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tag p {
 
     padding: 4px 8px;
 
@@ -54,6 +75,7 @@ const Container = styled.main`
     border-radius: 100px;
 
     color: ${({ theme }) => theme.yellowDark};
+
     /* Components/Tag */
     font-size: 10px;
     font-family: 'Roboto';
@@ -62,7 +84,7 @@ const Container = styled.main`
     text-transform: uppercase;
   }
 
-  p:nth-child(3) {
+  .title {
     margin-top: 16px;
 
     color: ${({ theme }) => theme['base-subtitle']};
@@ -72,10 +94,10 @@ const Container = styled.main`
     line-height: 130%;
   }
 
-  p:nth-child(4) {
+  .content {
     margin-top: 8px;
 
-    width: 216px;
+    width: 220px;
 
     color: ${({ theme }) => theme['base-label']};
     text-align: center;
