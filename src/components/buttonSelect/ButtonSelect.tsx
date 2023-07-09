@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { ButtonHTMLAttributes, ReactNode, useState } from 'react'
 import { CreditCard, Money, Bank } from '@phosphor-icons/react'
 
-interface IButtonPrimaryProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   Icon?: 'creditCard' | 'money' | 'bank' | 'none'
 }
@@ -11,7 +11,7 @@ export const ButtonSelect = ({
   Icon = 'none',
   children,
   ...rest
-}: IButtonPrimaryProps) => {
+}: IButtonProps) => {
   const [isSelect, setIsSelect] = useState(false)
 
   function handleSelect() {

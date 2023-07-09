@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import { ButtonHTMLAttributes, ReactNode } from 'react'
 
-interface IButtonPrimaryProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
 }
 
-export const ButtonPrimary = ({ children, ...rest }: IButtonPrimaryProps) => {
+export const ButtonPrimary = ({ children, ...rest }: IButtonProps) => {
   return <Container {...rest}>{children}</Container>
 }
 

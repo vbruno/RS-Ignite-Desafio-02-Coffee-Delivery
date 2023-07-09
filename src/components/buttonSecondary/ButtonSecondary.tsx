@@ -2,11 +2,11 @@ import styled from 'styled-components'
 import { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Trash } from '@phosphor-icons/react'
 
-interface IButtonPrimaryProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
 }
 
-export const ButtonSecondary = ({ children, ...rest }: IButtonPrimaryProps) => {
+export const ButtonSecondary = ({ children, ...rest }: IButtonProps) => {
   return (
     <Container {...rest}>
       <Trash className="icon" />

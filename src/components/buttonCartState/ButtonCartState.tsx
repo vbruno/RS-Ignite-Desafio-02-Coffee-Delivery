@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { ButtonHTMLAttributes } from 'react'
 import { ShoppingCart } from '@phosphor-icons/react'
 
-type IButtonPrimaryProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type IButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   value?: number
   visible?: boolean
 }
@@ -11,7 +11,7 @@ export const ButtonCartState = ({
   value,
   visible,
   ...rest
-}: IButtonPrimaryProps) => {
+}: IButtonProps) => {
   return (
     <Container {...rest}>
       <ShoppingCart className="icon" weight="fill" />
