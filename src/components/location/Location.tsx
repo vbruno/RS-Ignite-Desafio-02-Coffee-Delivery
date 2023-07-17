@@ -9,7 +9,7 @@ interface IComponentProps {
 export const Location = ({ children, ...rest }: IComponentProps) => {
   return (
     <Container {...rest}>
-      <MapPin className="icon" weight='fill' />
+      <MapPin className="icon" weight="fill" />
       {children}
     </Container>
   )
@@ -43,5 +43,4 @@ const Container = styled.div`
 
     color: ${(props) => props.theme.purple};
   }
-
 `

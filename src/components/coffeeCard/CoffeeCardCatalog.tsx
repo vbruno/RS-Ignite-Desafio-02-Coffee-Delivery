@@ -10,7 +10,7 @@ interface ICoffeeCardCatalogProps {
   type: 'expressoTradicional' | 'expressoAmericano' | 'expressoCremoso' | 'expressoGelado' | 'cafeComLeite' | 'latte' | 'capuccino' | 'macchiato' | 'macaccino' | 'chocolateQuente' | 'cubano' | 'havaiano' | 'arabe' | 'irlandes'
 }
 
-export const CoffeeCardCatalog = ({type}:ICoffeeCardCatalogProps) => {
+export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
   const [numberCoffee, setNumberCoffee] = useState(0)
 
   const [coffee, setCoffee] = useState<ICoffeeType>()
@@ -24,18 +24,18 @@ export const CoffeeCardCatalog = ({type}:ICoffeeCardCatalogProps) => {
   return (
     <Container>
       <img src={imgCoffee[type]} alt="expresso" />
-      <div className="tag">
-      {coffee?.tag.map((tag) => ( <p key={tag}>{tag}</p>))}
-      </div>
-      <p className='title'>{coffee?.title}</p>
-      <p className='content'>{coffee?.content}</p>
-      <div className="buy">
-        <span className="">R$ <strong>{coffee?.price.toFixed(2)}</strong></span>
+      <Tag>
+        {coffee?.tag.map((tag) => (<p key={tag}>{tag}</p>))}
+      </Tag>
+      <Title>{coffee?.title}</Title>
+      <Content>{coffee?.content}</Content>
+      <Buy>
+        <span>R$ <strong>{coffee?.price.toFixed(2)}</strong></span>
         <div>
           <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
           <ButtonState />
         </div>
-      </div>
+      </Buy>
     </Container>
   )
 }
@@ -148,4 +148,93 @@ const Container = styled.main`
     gap: 8px;
 
   }
+`
+const Tag = styled.div`
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  p {
+
+    padding: 4px 8px;
+
+    background: ${({ theme }) => theme.yellowLight};
+    border-radius: 100px;
+
+    color: ${({ theme }) => theme.yellowDark};
+
+    /* Components/Tag */
+    font-size: 10px;
+    font-family: 'Roboto';
+    font-weight: 700;
+    line-height: 130%;
+    text-transform: uppercase;
+  }
+`
+
+const Title = styled.p`
+  margin-top: 16px;
+
+  color: ${({ theme }) => theme['base-subtitle']};
+  /* Title/Title S */
+  font-size: 20px;
+  font-family: 'Baloo 2';
+  line-height: 130%;
+`
+
+const Content = styled.p`
+  margin-top: 8px;
+
+  width: 220px;
+
+  color: ${({ theme }) => theme['base-label']};
+  text-align: center;
+  /* Text/Regular S */
+  font-size: 14px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+
+`
+
+const Buy = styled.div`
+  margin-top: 33px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 208px;
+
+  span {
+    color: ${({ theme }) => theme['base-text']};
+    text-align: right;
+    font-size: 14px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+  }
+
+  span strong {
+    text-align: right;
+    font-size: 24px;
+    font-family: 'Baloo 2';
+    font-weight: 800;
+    line-height: 130%;
+
+  }
+
+  div {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+  }
+
 `

@@ -6,24 +6,22 @@ import expresso from './images/expresso.png'
 export const CoffeeCardCart = () => {
   const [numberCoffee, setNumberCoffee] = useState(0)
 
-return (
-  <Container>
-    <div className='info'>
-      <img src={expresso} alt="" />
-      <div className='details'>
-        <p>Expresso Tradicional</p>
-        <div className='actions' >
-        <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
-        <ButtonSecondary>remover</ButtonSecondary>
-        </div>
-      </div>
+  return (
+    <Container>
+      <Info>
+        <img src={expresso} alt="" />
+        <Details>
+          <p>Expresso Tradicional</p>
+          <Actions>
+            <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
+            <ButtonSecondary>remover</ButtonSecondary>
+          </Actions>
+        </Details>
+      </Info>
+      <Value>R$ 9,90</Value>
+    </Container>
 
-    </div>
-
-  <p className='value'>R$ 9,90</p>
-  </Container>
-
-)
+  )
 }
 
 
@@ -35,25 +33,27 @@ const Container = styled.main`
   padding: 8px 4px;
 
   background: ${({ theme }) => theme['base-card']};
+`
 
-  .info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
+const Info = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
 
-  .info img {
+  img {
     width: 64px;
   }
 
-  .details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+`
 
-  .details p {
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+
+  p {
     color: ${({ theme }) => theme['base-subtitle']};
 
     /* Text/Regular M */
@@ -64,24 +64,21 @@ const Container = styled.main`
     line-height: 130%;
   }
 
-  .actions {
-    display: flex;
+`
+const Actions = styled.div`
+  display: flex;
 
-    align-items: center;
-    gap: 8px;
+  align-items: center;
+  gap: 8px;
+`
+const Value = styled.p`
+  color: ${({ theme }) => theme['base-text']};
+  text-align: right;
 
-  }
-
-  .value {
-    color: ${({ theme }) => theme['base-text']};
-    text-align: right;
-
-    /* Text/Bold M */
-    font-size: 16px;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 130%;
-  }
-
+  /* Text/Bold M */
+  font-size: 16px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 130%;
 `

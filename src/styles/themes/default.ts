@@ -1,5 +1,4 @@
 export const defaultTheme = {
-
   purpleDark: '#4b2894',
   purple: '#7f46f7',
   purpleLight: '#ebe5f9',
@@ -15,8 +14,8 @@ export const defaultTheme = {
   'base-button': '#e6e5e5',
   'base-input': '#ededed',
   'base-card': '#f3f2f2',
-   background: '#fafafa',
-   white: '#fff',
+  background: '#fafafa',
+  white: '#fff',
 
   'gray-100': '#E1E1E6',
   'gray-300': '#C4C4CC',
