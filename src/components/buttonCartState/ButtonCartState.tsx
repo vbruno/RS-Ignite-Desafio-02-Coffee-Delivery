@@ -7,11 +7,7 @@ type IButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   visible?: boolean
 }
 
-export const ButtonCartState = ({
-  value,
-  visible,
-  ...rest
-}: IButtonProps) => {
+export const ButtonCartState = ({ value, visible, ...rest }: IButtonProps) => {
   return (
     <Container {...rest}>
       <ShoppingCart className="icon" weight="fill" />
