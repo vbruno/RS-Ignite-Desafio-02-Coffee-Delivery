@@ -1,39 +1,72 @@
 import styled from 'styled-components'
 
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ButtonState, InputNumber } from '..'
 
-
 import { ICoffeeType, coffeeType, imgCoffee } from './coffeeType'
+import { ICoffee, OrderContext } from '../../context/OrderContext'
 
 interface ICoffeeCardCatalogProps {
-  type: 'expressoTradicional' | 'expressoAmericano' | 'expressoCremoso' | 'expressoGelado' | 'cafeComLeite' | 'latte' | 'capuccino' | 'macchiato' | 'macaccino' | 'chocolateQuente' | 'cubano' | 'havaiano' | 'arabe' | 'irlandes'
+  type:
+    | 'expressoTradicional'
+    | 'expressoAmericano'
+    | 'expressoCremoso'
+    | 'expressoGelado'
+    | 'cafeComLeite'
+    | 'latte'
+    | 'capuccino'
+    | 'macchiato'
+    | 'macaccino'
+    | 'chocolateQuente'
+    | 'cubano'
+    | 'havaiano'
+    | 'arabe'
+    | 'irlandes'
 }
 
 export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
   const [numberCoffee, setNumberCoffee] = useState(0)
-
   const [coffee, setCoffee] = useState<ICoffeeType>()
+
+  const { setCart, setOrder } = useContext(OrderContext)
 
   useEffect(() => {
     setCoffee(coffeeType.find((coffee) => coffee.type === type) as ICoffeeType)
   }, [type])
 
+  function handleAddCoffee() {
+    if (coffee === undefined) return
 
+    const coffeeAddCart: ICoffee = {
+      name: coffee.title,
+      price: coffee?.price,
+      quantity: numberCoffee,
+      total: Number((coffee?.price * numberCoffee).toFixed(2)),
+    }
+
+    setCart((prev) => [...prev, { ...coffeeAddCart }])
+    setOrder((prev) => prev + numberCoffee)
+
+    setNumberCoffee(0)
+  }
 
   return (
     <Container>
       <img src={imgCoffee[type]} alt="expresso" />
       <Tag>
-        {coffee?.tag.map((tag) => (<p key={tag}>{tag}</p>))}
+        {coffee?.tag.map((tag) => (
+          <p key={tag}>{tag}</p>
+        ))}
       </Tag>
       <Title>{coffee?.title}</Title>
       <Content>{coffee?.content}</Content>
       <Buy>
-        <span>R$ <strong>{coffee?.price.toFixed(2)}</strong></span>
+        <span>
+          R$ <strong>{coffee?.price.toFixed(2)}</strong>
+        </span>
         <div>
           <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
-          <ButtonState />
+          <ButtonState onClick={handleAddCoffee} />
         </div>
       </Buy>
     </Container>
@@ -68,7 +101,6 @@ const Container = styled.main`
   }
 
   .tag p {
-
     padding: 4px 8px;
 
     background: ${({ theme }) => theme.yellowLight};
@@ -136,9 +168,7 @@ const Container = styled.main`
     font-family: 'Baloo 2';
     font-weight: 800;
     line-height: 130%;
-
   }
-
 
   .buy div {
     height: 38px;
@@ -146,7 +176,6 @@ const Container = styled.main`
     display: flex;
     align-items: center;
     gap: 8px;
-
   }
 `
 const Tag = styled.div`
@@ -156,7 +185,6 @@ const Tag = styled.div`
   gap: 4px;
 
   p {
-
     padding: 4px 8px;
 
     background: ${({ theme }) => theme.yellowLight};
@@ -196,7 +224,6 @@ const Content = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: 130%;
-
 `
 
 const Buy = styled.div`
@@ -225,7 +252,6 @@ const Buy = styled.div`
     font-family: 'Baloo 2';
     font-weight: 800;
     line-height: 130%;
-
   }
 
   div {
@@ -234,7 +260,5 @@ const Buy = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
-
   }
-
 `

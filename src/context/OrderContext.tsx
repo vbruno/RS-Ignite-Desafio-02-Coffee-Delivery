@@ -6,11 +6,11 @@ import {
   useState,
 } from 'react'
 
-interface ICoffee {
-  id: number
+export interface ICoffee {
+  // id: number
   name: string
   price: number
-  image: string
+  // image: string
   quantity: number
   total: number
 }
@@ -27,7 +27,7 @@ export const OrderContext = createContext<IOrderContextType>(
 )
 
 export function OrderContextProvider({ children }: { children: ReactNode }) {
-  const [order, setOrder] = useState(5)
+  const [order, setOrder] = useState(0)
 
   const [cart, setCart] = useState<ICoffee[]>([] as ICoffee[])
 
