@@ -31,10 +31,10 @@ export const ButtonSelect = ({
 }
 
 const Container = styled.button`
-  display: flex;
+  /* display: flex; */
 
-  height: 32px;
-  width: auto;
+  /* height: 32px; */
+  /* width: auto; */
 
   background: none;
   border: none;
@@ -45,8 +45,8 @@ const Container = styled.button`
     display: flex;
     border-radius: 6px;
 
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* height: 100%; */
 
     align-items: center;
     justify-content: center;
