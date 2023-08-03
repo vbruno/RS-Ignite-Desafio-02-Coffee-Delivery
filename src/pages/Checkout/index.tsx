@@ -1,11 +1,19 @@
 import { CurrencyDollar, MapPinLine } from '@phosphor-icons/react'
 import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
+import { useNavigate } from 'react-router-dom'
 
 import { defaultTheme } from '../../styles/themes/default'
-import { ButtonSelect } from '../../components'
+import { ButtonPrimary, ButtonSelect } from '../../components'
+import { CoffeeCardCart } from '../../components/coffeeCard/CoffeeCardCart'
 
 export function Checkout() {
+  const navigate = useNavigate()
+
+  function HandleFinish() {
+    navigate('/success')
+  }
+
   return (
     <div>
       <CheckoutContainer>
@@ -57,10 +65,47 @@ export function Checkout() {
           </PaymentContainer>
         </AddressPaymentContainer>
         <OrderSummaryContainer>
-          <h1>Resumo do pedido</h1>
+          <h1>Cafés selecionados</h1>
+          <OrderListBuy>
+            <CoffeeCardCart />
+            <Line />
+            <CoffeeCardCart />
+            <Line />
+            <OrderSummary>
+              <ItemOrderSumary>
+                <span>Total de itens</span>
+                <span>R$29,70</span>
+              </ItemOrderSumary>
+              <ItemOrderSumary>
+                <span>Entrega</span>
+                <span>R$3,50</span>
+              </ItemOrderSumary>
+              <ItemOrderSumary>
+                <p>Total de itens</p>
+                <p>R$29,70</p>
+              </ItemOrderSumary>
+              <ButtonPrimary onClick={HandleFinish}>
+                confirmar pedido
+              </ButtonPrimary>
+            </OrderSummary>
+          </OrderListBuy>
         </OrderSummaryContainer>
       </CheckoutContainer>
     </div>
+  )
+}
+
+const Line = () => {
+  return (
+    <svg
+      width="368"
+      height="2"
+      viewBox="0 0 368 2"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 1H368" stroke="#E6E5E5" />
+    </svg>
   )
 }
 
@@ -189,6 +234,9 @@ const AddressForm = styled.div`
 
     div:nth-child(3) {
       width: 60px;
+      input {
+        text-transform: uppercase;
+      }
     }
   }
 `
@@ -251,7 +299,98 @@ const PaymentChoice = styled.div`
 `
 
 const OrderSummaryContainer = styled.div`
-  width: 350px;
+  width: 448px;
 
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  h1 {
+    color: ${({ theme }) => theme['base-subtitle']};
+
+    /* Title/Title XS */
+    font-family: 'Baloo 2';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%; /* 23.4px */
+  }
+`
+
+const OrderListBuy = styled.div`
+  h1 {
+    color: ${({ theme }) => theme['base-subtitle']};
+
+    /* Title/Title XS */
+    font-family: 'Baloo 2';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%; /* 23.4px */
+  }
+
+  display: flex;
+  padding: 40px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+
+  border-radius: 6px 44px;
+  background: ${({ theme }) => theme['base-card']};
+`
+
+const OrderSummary = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+
+  button {
+    display: inline-block;
+    width: 100%;
+  }
+`
+const ItemOrderSumary = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+
+  span:nth-child(1) {
+    color: ${({ theme }) => theme['base-text']};
+    text-align: right;
+
+    /* Text/Regular S */
+    font-family: 'Roboto';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 18.2px */
+  }
+
+  span:nth-child(2) {
+    color: ${({ theme }) => theme['base-text']};
+    text-align: right;
+
+    /* Text/Regular M */
+    font-family: 'Roboto';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 20.8px */
+  }
+
+  p {
+    color: ${({ theme }) => theme['base-subtitle']};
+    text-align: right;
+
+    /* Text/Bold L */
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%; /* 26px */
+  }
 `
