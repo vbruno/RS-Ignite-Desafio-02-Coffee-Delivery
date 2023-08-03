@@ -1,33 +1,45 @@
-import { useCallback } from 'react';
-import styled from 'styled-components';
+import { useCallback } from 'react'
+import styled from 'styled-components'
 
-import { ShoppingCart, Timer, Package, Coffee, MapPin, CurrencyDollar } from '@phosphor-icons/react';
+import {
+  ShoppingCart,
+  Timer,
+  Package,
+  Coffee,
+  MapPin,
+  CurrencyDollar,
+} from '@phosphor-icons/react'
 
 interface IComponentProps {
-  icon: "shoppingCart" | "timer" | "package" | "coffee" | "mapPin" | "currencyDollar";
-  cor: string;
+  icon:
+    | 'shoppingCart'
+    | 'timer'
+    | 'package'
+    | 'coffee'
+    | 'mapPin'
+    | 'currencyDollar'
+  cor: string
 }
 
-export const ItemIcon = ({ icon, cor, ...rest }: IComponentProps) => {
-
+export const ItemIcon = ({ icon, cor = '#fff', ...rest }: IComponentProps) => {
   const renderIcon = useCallback(() => {
     switch (icon) {
       case 'shoppingCart':
-        return <ShoppingCart color='#fff' weight='fill' />
+        return <ShoppingCart color="#FFF" weight="fill" {...rest} />
       case 'timer':
-        return <Timer color='#fff' weight='fill' />
+        return <Timer color="#FFF" weight="fill" {...rest} />
       case 'package':
-        return <Package color='#fff' weight='fill' />
+        return <Package color="#FFF" weight="fill" {...rest} />
       case 'coffee':
-        return <Coffee color='#fff' weight='fill' />
+        return <Coffee color="#FFF" weight="fill" {...rest} />
       case 'mapPin':
-        return <MapPin color='#fff' weight='fill' />
+        return <MapPin color="#FFF" weight="fill" {...rest} />
       case 'currencyDollar':
-        return <CurrencyDollar color='#fff' />
+        return <CurrencyDollar color="#FFF" {...rest} />
       default:
         return null
     }
-  }, [icon])
+  }, [icon, rest])
 
   return (
     <Container style={{ background: cor }} {...rest}>
@@ -51,5 +63,4 @@ const Container = styled.div`
   border: none;
 
   color: ${(props) => props.theme.purpleDark};
-
 `
