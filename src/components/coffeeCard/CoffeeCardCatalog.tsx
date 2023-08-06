@@ -38,9 +38,11 @@ export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
     if (coffee === undefined) return
 
     const coffeeAddCart: ICoffee = {
+      id: new Date().getTime(),
       name: coffee.title,
       price: coffee?.price,
       quantity: numberCoffee,
+      type,
       total: Number((coffee?.price * numberCoffee).toFixed(2)),
     }
 
@@ -52,7 +54,7 @@ export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
 
   return (
     <Container>
-      <img src={imgCoffee[type]} alt="expresso" />
+      <img src={imgCoffee[type]} alt="tipo de café" />
       <Tag>
         {coffee?.tag.map((tag) => (
           <p key={tag}>{tag}</p>

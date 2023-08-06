@@ -1,29 +1,87 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ButtonSecondary, InputNumber } from '..'
-import expresso from './images/expresso.png'
+import { imgCoffee } from './coffeeType'
+import { OrderContext } from '../../context/OrderContext'
 
-export const CoffeeCardCart = () => {
-  const [numberCoffee, setNumberCoffee] = useState(0)
+interface ITypeCoffee {
+  type:
+    | 'expressoTradicional'
+    | 'expressoAmericano'
+    | 'expressoCremoso'
+    | 'expressoGelado'
+    | 'cafeComLeite'
+    | 'latte'
+    | 'capuccino'
+    | 'macchiato'
+    | 'macaccino'
+    | 'chocolateQuente'
+    | 'cubano'
+    | 'havaiano'
+    | 'arabe'
+    | 'irlandes'
+}
+
+interface ICoffeeCardCartProps {
+  id: number
+  name: string
+  type: ITypeCoffee['type']
+  price: number
+  quantity: number
+  total: number
+}
+
+export const CoffeeCardCart = (props: ICoffeeCardCartProps) => {
+  const [numberCoffee, setNumberCoffee] = useState(props.quantity)
+
+  const { cart, setCart } = useContext(OrderContext)
+
+  useEffect(() => {
+    if (!cart) return
+    setCart((prev) =>
+      prev.map((coffee) =>
+        coffee.id === props.id
+          ? {
+              ...coffee,
+              quantity: numberCoffee,
+              total: Number((coffee.price * numberCoffee).toFixed(2)),
+            }
+          : coffee,
+      ),
+    )
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [numberCoffee])
+
+  useEffect(() => {
+    console.log(props)
+    console.log(cart)
+  }, [props, cart])
+
+  // Remover item do carrinho
+  function handleRemoveCoffee() {
+    setCart((prev) => prev.filter((coffee) => coffee.id !== props.id))
+  }
 
   return (
     <Container>
       <Info>
-        <img src={expresso} alt="" />
+        <img src={imgCoffee[props.type]} alt="tipo de café" />
+
         <Details>
-          <p>Expresso Tradicional</p>
+          <p>{props.name}</p>
           <Actions>
             <InputNumber inputValue={numberCoffee} outValue={setNumberCoffee} />
-            <ButtonSecondary>remover</ButtonSecondary>
+            <ButtonSecondary onClick={handleRemoveCoffee}>
+              remover
+            </ButtonSecondary>
           </Actions>
         </Details>
       </Info>
-      <Value>R$ 9,90</Value>
+      <Value>R${String(props.total.toFixed(2)).replace('.', ',')}</Value>
     </Container>
-
   )
 }
-
 
 const Container = styled.main`
   display: flex;
@@ -43,7 +101,6 @@ const Info = styled.div`
   img {
     width: 64px;
   }
-
 `
 
 const Details = styled.div`
@@ -51,7 +108,6 @@ const Details = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-
 
   p {
     color: ${({ theme }) => theme['base-subtitle']};
@@ -63,7 +119,6 @@ const Details = styled.div`
     font-weight: 400;
     line-height: 130%;
   }
-
 `
 const Actions = styled.div`
   display: flex;

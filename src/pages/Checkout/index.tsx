@@ -3,14 +3,15 @@ import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, set, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DevTool } from '@hookform/devtools'
 
 import { defaultTheme } from '../../styles/themes/default'
 import { ButtonPrimary, ButtonSelect } from '../../components'
 import { CoffeeCardCart } from '../../components/coffeeCard/CoffeeCardCart'
-import { FormEvent, useRef } from 'react'
+import { FormEvent, useContext, useEffect, useRef, useState } from 'react'
+import { OrderContext } from '../../context/OrderContext'
 
 const schemaForm = z.object({
   cep: z.string().nonempty('Campo CEP vazio'),
@@ -28,7 +29,9 @@ type FormType = z.infer<typeof schemaForm>
 export function Checkout() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
-
+  const { formPayment, order, cart } = useContext(OrderContext)
+  const [totalItensCoffee, setTotalItensCoffee] = useState(0)
+  const [totalPaid, setTotalPaid] = useState(0)
   const {
     handleSubmit,
     control,
@@ -45,6 +48,18 @@ export function Checkout() {
     },
     resolver: zodResolver(schemaForm),
   })
+
+  useEffect(() => {
+    if (!cart) return
+    const total: number = cart.reduce((acc, coffee) => {
+      return acc + coffee.total
+    }, 0)
+
+    setTotalItensCoffee(total)
+    setTotalPaid(Number(total + 3.5))
+
+    console.log(total)
+  }, [cart, setTotalPaid])
 
   function onSubmit(data: FormType) {
     console.log(data)
@@ -175,19 +190,38 @@ export function Checkout() {
               <ButtonSelect Icon="bank">CARTÃO DE DÉBITO</ButtonSelect>
               <ButtonSelect Icon="money">DINHEIRO</ButtonSelect>
             </PaymentChoice>
+            <div>
+              {formPayment.selectPayment === 'none' && (
+                <p>Favor escolher uma forma de pagamento!</p>
+              )}
+            </div>
           </PaymentContainer>
         </AddressPaymentContainer>
         <OrderSummaryContainer>
           <h1>Cafés selecionados</h1>
           <OrderListBuy>
-            <CoffeeCardCart />
-            <Line />
-            <CoffeeCardCart />
+            {!!order &&
+              !!cart &&
+              cart.map((item) => {
+                return (
+                  <CoffeeCardCart
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    price={item.price}
+                    type={item.type}
+                    quantity={item.quantity}
+                    total={item.total}
+                  />
+                )
+              })}
             <Line />
             <OrderSummary>
               <ItemOrderSummary>
                 <span>Total de itens</span>
-                <span>R$29,70</span>
+                <span>
+                  R${String(totalItensCoffee.toFixed(2)).replace('.', ',')}
+                </span>
               </ItemOrderSummary>
               <ItemOrderSummary>
                 <span>Entrega</span>
@@ -195,7 +229,7 @@ export function Checkout() {
               </ItemOrderSummary>
               <ItemOrderSummary>
                 <p>Total de itens</p>
-                <p>R$29,70</p>
+                <p>R${String(totalPaid.toFixed(2)).replace('.', ',')}</p>
               </ItemOrderSummary>
               <ButtonPrimary onClick={handleSubmitEvent}>
                 confirmar pedido
@@ -389,12 +423,33 @@ const PaymentContainer = styled.div`
   h2 {
     color: ${({ theme }) => theme['base-text']};
 
+    margin-top: 4px;
+
     /* Text/Regular S */
     font-family: Roboto;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 130%; /* 18.2px */
+  }
+
+  div:nth-child(3) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      color: ${({ theme }) => theme['base-text']};
+
+      margin-top: 4px;
+
+      /* Text/Regular S */
+      font-family: Roboto;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%; /* 18.2px */
+    }
   }
 `
 

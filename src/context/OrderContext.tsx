@@ -6,11 +6,29 @@ import {
   useState,
 } from 'react'
 
+interface ITypeCoffee {
+  type:
+    | 'expressoTradicional'
+    | 'expressoAmericano'
+    | 'expressoCremoso'
+    | 'expressoGelado'
+    | 'cafeComLeite'
+    | 'latte'
+    | 'capuccino'
+    | 'macchiato'
+    | 'macaccino'
+    | 'chocolateQuente'
+    | 'cubano'
+    | 'havaiano'
+    | 'arabe'
+    | 'irlandes'
+}
+
 export interface ICoffee {
-  // id: number
+  id: number
   name: string
   price: number
-  // image: string
+  type: ITypeCoffee['type']
   quantity: number
   total: number
 }
@@ -33,8 +51,17 @@ export const OrderContext = createContext<IOrderContextType>(
 )
 
 export function OrderContextProvider({ children }: { children: ReactNode }) {
-  const [order, setOrder] = useState(0)
-  const [cart, setCart] = useState<ICoffee[]>([] as ICoffee[])
+  const [order, setOrder] = useState(1)
+  const [cart, setCart] = useState<ICoffee[]>([
+    {
+      id: 1691347668231,
+      name: 'Expresso Tradicional',
+      price: 9.9,
+      quantity: 1,
+      type: 'expressoCremoso',
+      total: 9.9,
+    },
+  ] as ICoffee[])
   const [formPayment, setFormPayment] = useState({
     selectPayment: 'none',
   } as IFormPayment)
