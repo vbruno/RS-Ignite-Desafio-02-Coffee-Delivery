@@ -2,16 +2,57 @@ import { CurrencyDollar, MapPinLine } from '@phosphor-icons/react'
 import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
 import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { DevTool } from '@hookform/devtools'
 
 import { defaultTheme } from '../../styles/themes/default'
 import { ButtonPrimary, ButtonSelect } from '../../components'
 import { CoffeeCardCart } from '../../components/coffeeCard/CoffeeCardCart'
+import { FormEvent, useRef } from 'react'
+
+const schemaForm = z.object({
+  cep: z.string().nonempty('Campo CEP vazio'),
+  street: z.string().nonempty('Campo rua vazio'),
+  number: z.string().nonempty('Campo número vazio'),
+  complement: z.string(),
+  neighborhood: z.string().nonempty('Campo bairro vazio'),
+  city: z.string().nonempty('Campo cidade vazio'),
+  state: z.string().nonempty('Campo estado vazio'),
+})
+
+// extract the type from the schema
+type FormType = z.infer<typeof schemaForm>
 
 export function Checkout() {
   const navigate = useNavigate()
+  const formRef = useRef<HTMLFormElement>(null)
 
-  function HandleFinish() {
-    navigate('/success')
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormType>({
+    defaultValues: {
+      cep: '',
+      street: '',
+      number: '',
+      complement: '',
+      neighborhood: '',
+      city: '',
+      state: '',
+    },
+    resolver: zodResolver(schemaForm),
+  })
+
+  function onSubmit(data: FormType) {
+    console.log(data)
+  }
+
+  function handleSubmitEvent() {
+    // formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }))
+    formRef.current?.requestSubmit()
   }
 
   return (
@@ -27,21 +68,93 @@ export function Checkout() {
                 <h2>Informe o endereço onde deseja receber seu pedido</h2>
               </div>
             </div>
-            <AddressForm>
+            <AddressForm ref={formRef} onSubmit={handleSubmit(onSubmit)}>
               <div id="row1">
-                <InputText placeholder="CEP" />
+                <Controller
+                  name="cep"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      placeholder="CEP"
+                      type="number"
+                      error={errors.cep?.message}
+                    />
+                  )}
+                />
               </div>
               <div id="row2">
-                <InputText placeholder="Rua" />
+                <Controller
+                  name="street"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      placeholder="Rua"
+                      error={errors.street?.message}
+                    />
+                  )}
+                />
               </div>
               <div id="row3">
-                <InputText placeholder="Número" />
-                <InputText placeholder="Complemento" observation="Opcional" />
+                <Controller
+                  name="number"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      placeholder="Número"
+                      type="number"
+                      error={errors.number?.message}
+                    />
+                  )}
+                />
+                <Controller
+                  name="complement"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      observation="Opcional"
+                      placeholder="Complemento"
+                    />
+                  )}
+                />
               </div>
               <div id="row4">
-                <InputText placeholder="Bairro" />
-                <InputText placeholder="Cidade" />
-                <InputText placeholder="UF" />
+                <Controller
+                  name="neighborhood"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      placeholder="Bairro"
+                      error={errors.neighborhood?.message}
+                    />
+                  )}
+                />
+                <Controller
+                  name="city"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      placeholder="Cidade"
+                      error={errors.city?.message}
+                    />
+                  )}
+                />
+                <Controller
+                  name="state"
+                  control={control}
+                  render={({ field }) => (
+                    <InputText
+                      {...field}
+                      placeholder="UF"
+                      error={errors.state?.message}
+                    />
+                  )}
+                />
               </div>
             </AddressForm>
           </AddressContainer>
@@ -72,24 +185,25 @@ export function Checkout() {
             <CoffeeCardCart />
             <Line />
             <OrderSummary>
-              <ItemOrderSumary>
+              <ItemOrderSummary>
                 <span>Total de itens</span>
                 <span>R$29,70</span>
-              </ItemOrderSumary>
-              <ItemOrderSumary>
+              </ItemOrderSummary>
+              <ItemOrderSummary>
                 <span>Entrega</span>
                 <span>R$3,50</span>
-              </ItemOrderSumary>
-              <ItemOrderSumary>
+              </ItemOrderSummary>
+              <ItemOrderSummary>
                 <p>Total de itens</p>
                 <p>R$29,70</p>
-              </ItemOrderSumary>
-              <ButtonPrimary onClick={HandleFinish}>
+              </ItemOrderSummary>
+              <ButtonPrimary onClick={handleSubmitEvent}>
                 confirmar pedido
               </ButtonPrimary>
             </OrderSummary>
           </OrderListBuy>
         </OrderSummaryContainer>
+        <DevTool control={control} /> {/* set up the dev tool */}
       </CheckoutContainer>
     </div>
   )
@@ -178,7 +292,7 @@ const AddressContainer = styled.div`
   }
 `
 
-const AddressForm = styled.div`
+const AddressForm = styled.form`
   width: 560px;
   display: flex;
   flex-direction: column;
@@ -352,7 +466,7 @@ const OrderSummary = styled.div`
     width: 100%;
   }
 `
-const ItemOrderSumary = styled.div`
+const ItemOrderSummary = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

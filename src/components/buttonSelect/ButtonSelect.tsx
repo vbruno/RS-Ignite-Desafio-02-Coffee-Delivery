@@ -1,6 +1,13 @@
 import styled from 'styled-components'
-import { ButtonHTMLAttributes, ReactNode, useState } from 'react'
+import {
+  ButtonHTMLAttributes,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { CreditCard, Money, Bank } from '@phosphor-icons/react'
+import { OrderContext } from '../../context/OrderContext'
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
@@ -13,9 +20,18 @@ export const ButtonSelect = ({
   ...rest
 }: IButtonProps) => {
   const [isSelect, setIsSelect] = useState(false)
+  const { formPayment, setFormPayment } = useContext(OrderContext)
+
+  useEffect(() => {
+    if (formPayment.selectPayment === Icon) {
+      setIsSelect(true)
+    } else {
+      setIsSelect(false)
+    }
+  }, [Icon, formPayment])
 
   function handleSelect() {
-    setIsSelect(!isSelect)
+    setFormPayment((prevState) => ({ ...prevState, selectPayment: Icon }))
   }
 
   return (
