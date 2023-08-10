@@ -43,7 +43,8 @@ const SuccessContainer = styled.div`
   flex-direction: column;
   margin: 80px auto 0;
   width: 1094px;
-  height: 380px;
+  /* height: 380px; */
+  height: auto;
   flex-shrink: 0;
 
   header {

@@ -31,11 +31,16 @@ export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
   const { setCart, setOrder } = useContext(OrderContext)
 
   useEffect(() => {
+    if (numberCoffee < 0) setNumberCoffee(0)
+  }, [numberCoffee])
+
+  useEffect(() => {
     setCoffee(coffeeType.find((coffee) => coffee.type === type) as ICoffeeType)
   }, [type])
 
   function handleAddCoffee() {
     if (coffee === undefined) return
+    if (numberCoffee === 0) return
 
     const coffeeAddCart: ICoffee = {
       id: new Date().getTime(),

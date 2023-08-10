@@ -37,6 +37,10 @@ export const CoffeeCardCart = (props: ICoffeeCardCartProps) => {
   const { cart, setCart } = useContext(OrderContext)
 
   useEffect(() => {
+    if (numberCoffee < 0) setNumberCoffee(0)
+  }, [numberCoffee])
+
+  useEffect(() => {
     if (!cart) return
     setCart((prev) =>
       prev.map((coffee) =>
@@ -53,10 +57,10 @@ export const CoffeeCardCart = (props: ICoffeeCardCartProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [numberCoffee])
 
-  useEffect(() => {
-    console.log(props)
-    console.log(cart)
-  }, [props, cart])
+  // useEffect(() => {
+  //   console.log(props)
+  //   console.log(cart)
+  // }, [props, cart])
 
   // Remover item do carrinho
   function handleRemoveCoffee() {

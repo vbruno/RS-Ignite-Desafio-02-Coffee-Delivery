@@ -6,7 +6,9 @@ export function DefaultLayout() {
   return (
     <Container>
       <Navbar />
-      <Outlet />
+      <div style={{ overflowY: 'auto' }}>
+        <Outlet />
+      </div>
     </Container>
   )
 }

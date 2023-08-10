@@ -259,9 +259,9 @@ const Line = () => {
 
 const CheckoutContainer = styled.div`
   width: 1120px;
-  height: 675px;
+  height: auto;
 
-  margin: 40px 0;
+  /* margin: 40px 0; */
 
   display: flex;
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import background from '../../assets/images/Background.png'
 
 export const HomeContainer = styled.div`
-  height: 100vh;
+  height: 89vh;
 
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ export const HomeContainer = styled.div`
 export const IntroContainer = styled.div`
   display: flex;
 
-  width: 100vw;
+  width: 95vw;
 
   background-image: url(${background});
   background-repeat: no-repeat;
