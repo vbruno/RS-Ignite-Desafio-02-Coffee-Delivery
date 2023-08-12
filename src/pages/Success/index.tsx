@@ -2,8 +2,31 @@ import styled from 'styled-components'
 import image from '../../assets/images/motoboy.svg'
 import { ItemIcon } from '../../components/itemIcon/ItemIcon'
 import { defaultTheme } from '../../styles/themes/default'
+import { OrderContext } from '../../context/OrderContext'
+import { useContext } from 'react'
 
 export function Success() {
+  const { customerRequest } = useContext(OrderContext)
+
+  function getRandomInt(min: number, max: number): number {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min) // The maximum is exclusive and the minimum is inclusive
+  }
+
+  function getPaymentType() {
+    switch (customerRequest.formPayment) {
+      case 'creditCard':
+        return 'Cartão de Crédito'
+      case 'money':
+        return 'Dinheiro'
+      case 'bank':
+        return 'Cartão de Débito'
+      default:
+        return 'Não informado'
+    }
+  }
+
   return (
     <SuccessContainer>
       <header>
@@ -15,20 +38,27 @@ export function Success() {
           <ItemOrderInfo>
             <ItemIcon icon="mapPin" cor={defaultTheme.purple} />
             <p>
-              Entrega em <b>Rua João Daniel Martinelli, 102</b> Farrapos - Porto
-              Alegre,RS
+              Entrega em{' '}
+              <b>
+                {customerRequest.street}, {customerRequest.number}
+              </b>{' '}
+              {customerRequest.neighborhood} - {customerRequest.city},{' '}
+              {customerRequest.state}
             </p>
           </ItemOrderInfo>
           <ItemOrderInfo>
             <ItemIcon icon="timer" cor={defaultTheme.yellow} />
             <p>
-              Previsão de entrega <b>20 min - 30 min</b>
+              Previsão de entrega{' '}
+              <b>
+                {getRandomInt(10, 20)} min - {getRandomInt(30, 60)} min
+              </b>
             </p>
           </ItemOrderInfo>
           <ItemOrderInfo>
             <ItemIcon icon="currencyDollar" cor={defaultTheme.yellowDark} />
             <p>
-              Pagamento na entrega <b>Cartão de Crédito</b>
+              Pagamento na entrega <b>{getPaymentType()}</b>
             </p>
           </ItemOrderInfo>
         </OrderInfo>

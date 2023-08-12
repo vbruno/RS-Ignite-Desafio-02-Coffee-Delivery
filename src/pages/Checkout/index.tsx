@@ -3,14 +3,14 @@ import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { Controller, set, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DevTool } from '@hookform/devtools'
 
 import { defaultTheme } from '../../styles/themes/default'
 import { ButtonPrimary, ButtonSelect } from '../../components'
 import { CoffeeCardCart } from '../../components/coffeeCard/CoffeeCardCart'
-import { FormEvent, useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { OrderContext } from '../../context/OrderContext'
 
 const schemaForm = z.object({
@@ -29,7 +29,8 @@ type FormType = z.infer<typeof schemaForm>
 export function Checkout() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
-  const { formPayment, order, cart } = useContext(OrderContext)
+  const { formPayment, order, setOrder, cart, setCart, setCustomerRequest } =
+    useContext(OrderContext)
   const [totalItensCoffee, setTotalItensCoffee] = useState(0)
   const [totalPaid, setTotalPaid] = useState(0)
   const {
@@ -38,13 +39,13 @@ export function Checkout() {
     formState: { errors },
   } = useForm<FormType>({
     defaultValues: {
-      cep: '',
-      street: '',
-      number: '',
-      complement: '',
-      neighborhood: '',
-      city: '',
-      state: '',
+      cep: '98930-060',
+      street: 'Rua das Margaridas',
+      number: '312',
+      complement: 'Casa',
+      neighborhood: 'Centro',
+      city: 'Tucunduva',
+      state: 'RS',
     },
     resolver: zodResolver(schemaForm),
   })
@@ -63,6 +64,21 @@ export function Checkout() {
 
   function onSubmit(data: FormType) {
     console.log(data)
+
+    const formData = {
+      ...data,
+      totalPaid,
+      order: cart,
+      formPayment: formPayment.selectPayment,
+    }
+
+    setCustomerRequest(formData)
+
+    setOrder(0)
+
+    setCart([])
+
+    navigate('/success')
   }
 
   function handleSubmitEvent() {
@@ -92,7 +108,6 @@ export function Checkout() {
                     <InputText
                       {...field}
                       placeholder="CEP"
-                      type="number"
                       error={errors.cep?.message}
                     />
                   )}
