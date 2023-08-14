@@ -75,18 +75,9 @@ export const OrderContext = createContext<IOrderContextType>(
 )
 
 export function OrderContextProvider({ children }: { children: ReactNode }) {
-  const [order, setOrder] = useState(1)
+  const [order, setOrder] = useState(0)
 
-  const [cart, setCart] = useState<ICoffee[]>([
-    {
-      id: 1691347668231,
-      name: 'Expresso Tradicional',
-      price: 9.9,
-      quantity: 1,
-      type: 'expressoCremoso',
-      total: 9.9,
-    },
-  ] as ICoffee[])
+  const [cart, setCart] = useState<ICoffee[]>([] as ICoffee[])
 
   const [formPayment, setFormPayment] = useState({
     selectPayment: 'none',

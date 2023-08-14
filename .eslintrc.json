@@ -1,7 +1,12 @@
 {
   "extends": "@rocketseat/eslint-config/react",
   // "extends": "@rocketseat/eslint-config/node",
+  "plugins": [
+    "react-hooks"
+  ],
   "rules": {
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "react-hooks/rules-of-hooks": "error", // For checking rules of hooks
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

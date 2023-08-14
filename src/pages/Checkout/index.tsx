@@ -1,9 +1,9 @@
-import { CurrencyDollar, MapPinLine } from '@phosphor-icons/react'
+import { CurrencyDollar, MapPinLine, Watch } from '@phosphor-icons/react'
 import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, set, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DevTool } from '@hookform/devtools'
 
@@ -31,39 +31,97 @@ export function Checkout() {
   const formRef = useRef<HTMLFormElement>(null)
   const { formPayment, order, setOrder, cart, setCart, setCustomerRequest } =
     useContext(OrderContext)
+  const [delivery, setDelivery] = useState(0)
   const [totalItensCoffee, setTotalItensCoffee] = useState(0)
   const [totalPaid, setTotalPaid] = useState(0)
   const {
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<FormType>({
     defaultValues: {
-      cep: '98930-060',
-      street: 'Rua das Margaridas',
-      number: '312',
-      complement: 'Casa',
-      neighborhood: 'Centro',
-      city: 'Tucunduva',
-      state: 'RS',
+      cep: '',
+      street: '',
+      number: '',
+      complement: '',
+      neighborhood: '',
+      city: '',
+      state: '',
     },
     resolver: zodResolver(schemaForm),
   })
 
   useEffect(() => {
-    if (!cart) return
+    if (cart.length === 0) {
+      setTotalItensCoffee(0)
+      setDelivery(0)
+      setTotalPaid(0)
+      return
+    }
+
     const total: number = cart.reduce((acc, coffee) => {
       return acc + coffee.total
     }, 0)
 
-    setTotalItensCoffee(total)
-    setTotalPaid(Number(total + 3.5))
+    const quantity: number = cart.reduce((acc, coffee) => {
+      return acc + coffee.quantity
+    }, 0)
 
-    console.log(total)
-  }, [cart, setTotalPaid])
+    setOrder(quantity)
+
+    setDelivery(3.5)
+    setTotalItensCoffee(total)
+    setTotalPaid(Number(total + delivery))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cart])
+
+  useEffect(() => {
+    if (totalItensCoffee === 0) {
+      setTotalItensCoffee(0)
+      setDelivery(0)
+      setTotalPaid(0)
+    }
+  }, [totalItensCoffee])
+
+  const cep = watch('cep')
+  useEffect(() => {
+    if (cep.length !== 8) return
+    setValue('cep', cep.replace(/(\d{5})(\d{3})/, '$1-$2') as any)
+    console.log(cep)
+  }, [cep, setValue])
+
+  const number = watch('number')
+  useEffect(() => {
+    setValue(
+      'number',
+      number.replace(/[!@#¨$%^&*)(+=._-]+/g, '').replace(/\D/g, '') as any,
+    )
+  }, [number, setValue])
+
+  const state = watch('state')
+  useEffect(() => {
+    setValue(
+      'state',
+      state
+        .toUpperCase()
+        .replace(/(\D{2})(\D+?)/, '$1')
+        .replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '') as any,
+    )
+    console.log(state)
+  }, [state, setValue])
 
   function onSubmit(data: FormType) {
-    console.log(data)
+    if (formPayment.selectPayment === 'none') {
+      alert('Favor escolher uma forma de pagamento!')
+      return
+    }
+    if (cart.length === 0) {
+      alert('Favor escolher um café!')
+      return
+    }
 
     const formData = {
       ...data,
@@ -104,11 +162,15 @@ export function Checkout() {
                 <Controller
                   name="cep"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       placeholder="CEP"
                       error={errors.cep?.message}
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
@@ -117,11 +179,15 @@ export function Checkout() {
                 <Controller
                   name="street"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       placeholder="Rua"
                       error={errors.street?.message}
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
@@ -130,23 +196,30 @@ export function Checkout() {
                 <Controller
                   name="number"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       placeholder="Número"
-                      type="number"
                       error={errors.number?.message}
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
                 <Controller
                   name="complement"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       observation="Opcional"
                       placeholder="Complemento"
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
@@ -155,33 +228,45 @@ export function Checkout() {
                 <Controller
                   name="neighborhood"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       placeholder="Bairro"
                       error={errors.neighborhood?.message}
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
                 <Controller
                   name="city"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       placeholder="Cidade"
                       error={errors.city?.message}
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
                 <Controller
                   name="state"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, value } }) => (
                     <InputText
-                      {...field}
                       placeholder="UF"
                       error={errors.state?.message}
+                      value={value}
+                      onChange={(e) => {
+                        const { value } = e.target
+                        onChange(value)
+                      }}
                     />
                   )}
                 />
@@ -215,8 +300,7 @@ export function Checkout() {
         <OrderSummaryContainer>
           <h1>Cafés selecionados</h1>
           <OrderListBuy>
-            {!!order &&
-              !!cart &&
+            {!!cart &&
               cart.map((item) => {
                 return (
                   <CoffeeCardCart
@@ -240,7 +324,7 @@ export function Checkout() {
               </ItemOrderSummary>
               <ItemOrderSummary>
                 <span>Entrega</span>
-                <span>R$3,50</span>
+                <span>R${String(delivery.toFixed(2)).replace('.', ',')}</span>
               </ItemOrderSummary>
               <ItemOrderSummary>
                 <p>Total de itens</p>

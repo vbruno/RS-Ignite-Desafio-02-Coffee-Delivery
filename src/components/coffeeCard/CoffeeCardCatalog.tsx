@@ -52,6 +52,7 @@ export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
     }
 
     setCart((prev) => [...prev, { ...coffeeAddCart }])
+
     setOrder((prev) => prev + numberCoffee)
 
     setNumberCoffee(0)
