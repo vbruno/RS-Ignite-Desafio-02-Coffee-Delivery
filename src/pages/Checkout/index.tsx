@@ -1,9 +1,9 @@
-import { CurrencyDollar, MapPinLine, Watch } from '@phosphor-icons/react'
+import { CurrencyDollar, MapPinLine } from '@phosphor-icons/react'
 import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { Controller, set, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DevTool } from '@hookform/devtools'
 
@@ -29,7 +29,7 @@ type FormType = z.infer<typeof schemaForm>
 export function Checkout() {
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
-  const { formPayment, order, setOrder, cart, setCart, setCustomerRequest } =
+  const { formPayment, setOrder, cart, setCart, setCustomerRequest } =
     useContext(OrderContext)
   const [delivery, setDelivery] = useState(0)
   const [totalItensCoffee, setTotalItensCoffee] = useState(0)

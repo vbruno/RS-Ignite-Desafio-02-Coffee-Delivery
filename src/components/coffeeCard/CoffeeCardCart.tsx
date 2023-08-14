@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { ButtonSecondary, InputNumber } from '..'
 import { imgCoffee } from './coffeeType'
 import { OrderContext } from '../../context/OrderContext'
-import { number } from 'zod'
 
 interface ITypeCoffee {
   type:
@@ -35,7 +34,7 @@ interface ICoffeeCardCartProps {
 export const CoffeeCardCart = (props: ICoffeeCardCartProps) => {
   const [numberCoffee, setNumberCoffee] = useState(props.quantity)
 
-  const { cart, setCart, order, setOrder } = useContext(OrderContext)
+  const { cart, setCart, setOrder } = useContext(OrderContext)
 
   useEffect(() => {
     if (numberCoffee < 0) setNumberCoffee(0)
