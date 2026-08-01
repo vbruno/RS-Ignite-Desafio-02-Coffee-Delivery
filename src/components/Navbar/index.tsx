@@ -2,9 +2,9 @@ import styled from 'styled-components'
 
 import logo from '../../assets/images/Logo.svg'
 import { ButtonCartState, Location } from '..'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useContext } from 'react'
-import { OrderContext } from '../../context/OrderContext'
+import { OrderContext } from '../../context/order-context'
 
 export function Navbar() {
   const navigate = useNavigate()

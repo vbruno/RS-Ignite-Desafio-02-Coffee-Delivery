@@ -1,17 +1,16 @@
 import { CurrencyDollar, MapPinLine } from '@phosphor-icons/react'
 import styled from 'styled-components'
 import { InputText } from '../../components/InputText'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DevTool } from '@hookform/devtools'
 
 import { defaultTheme } from '../../styles/themes/default'
 import { ButtonPrimary, ButtonSelect } from '../../components'
 import { CoffeeCardCart } from '../../components/coffeeCard/CoffeeCardCart'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { OrderContext } from '../../context/OrderContext'
+import { useContext, useEffect, useRef } from 'react'
+import { OrderContext } from '../../context/order-context'
 
 const schemaForm = z.object({
   cep: z.string().nonempty('Campo CEP vazio'),
@@ -31,13 +30,13 @@ export function Checkout() {
   const formRef = useRef<HTMLFormElement>(null)
   const { formPayment, setOrder, cart, setCart, setCustomerRequest } =
     useContext(OrderContext)
-  const [delivery, setDelivery] = useState(0)
-  const [totalItensCoffee, setTotalItensCoffee] = useState(0)
-  const [totalPaid, setTotalPaid] = useState(0)
+  const totalItensCoffee = cart.reduce((total, coffee) => total + coffee.total, 0)
+  const totalOrder = cart.reduce((total, coffee) => total + coffee.quantity, 0)
+  const delivery = cart.length > 0 ? 3.5 : 0
+  const totalPaid = totalItensCoffee + delivery
   const {
     handleSubmit,
     control,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<FormType>({
@@ -54,61 +53,32 @@ export function Checkout() {
   })
 
   useEffect(() => {
-    if (cart.length === 0) {
-      setTotalItensCoffee(0)
-      setDelivery(0)
-      setTotalPaid(0)
-      return
-    }
+    setOrder(totalOrder)
+  }, [setOrder, totalOrder])
 
-    const total: number = cart.reduce((acc, coffee) => {
-      return acc + coffee.total
-    }, 0)
-
-    const quantity: number = cart.reduce((acc, coffee) => {
-      return acc + coffee.quantity
-    }, 0)
-
-    setOrder(quantity)
-
-    setDelivery(3.5)
-    setTotalItensCoffee(total)
-    setTotalPaid(Number(total + delivery))
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cart])
-
-  useEffect(() => {
-    if (totalItensCoffee === 0) {
-      setTotalItensCoffee(0)
-      setDelivery(0)
-      setTotalPaid(0)
-    }
-  }, [totalItensCoffee])
-
-  const cep = watch('cep')
+  const cep = useWatch({ control, name: 'cep' })
   useEffect(() => {
     if (cep.length !== 8) return
-    setValue('cep', cep.replace(/(\d{5})(\d{3})/, '$1-$2') as any)
+    setValue('cep', cep.replace(/(\d{5})(\d{3})/, '$1-$2'))
     console.log(cep)
   }, [cep, setValue])
 
-  const number = watch('number')
+  const number = useWatch({ control, name: 'number' })
   useEffect(() => {
     setValue(
       'number',
-      number.replace(/[!@#¨$%^&*)(+=._-]+/g, '').replace(/\D/g, '') as any,
+      number.replace(/[!@#¨$%^&*)(+=._-]+/g, '').replace(/\D/g, ''),
     )
   }, [number, setValue])
 
-  const state = watch('state')
+  const state = useWatch({ control, name: 'state' })
   useEffect(() => {
     setValue(
       'state',
       state
         .toUpperCase()
         .replace(/(\D{2})(\D+?)/, '$1')
-        .replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '') as any,
+        .replace(/[0-9!@#¨$%^&*)(+=._-]+/g, ''),
     )
     console.log(state)
   }, [state, setValue])
@@ -336,7 +306,6 @@ export function Checkout() {
             </OrderSummary>
           </OrderListBuy>
         </OrderSummaryContainer>
-        <DevTool control={control} /> {/* set up the dev tool */}
       </CheckoutContainer>
     </div>
   )

@@ -2,17 +2,11 @@ import styled from 'styled-components'
 import image from '../../assets/images/motoboy.svg'
 import { ItemIcon } from '../../components/itemIcon/ItemIcon'
 import { defaultTheme } from '../../styles/themes/default'
-import { OrderContext } from '../../context/OrderContext'
+import { OrderContext } from '../../context/order-context'
 import { useContext } from 'react'
 
 export function Success() {
   const { customerRequest } = useContext(OrderContext)
-
-  function getRandomInt(min: number, max: number): number {
-    min = Math.ceil(min)
-    max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min) + min) // The maximum is exclusive and the minimum is inclusive
-  }
 
   function getPaymentType() {
     switch (customerRequest.formPayment) {
@@ -50,9 +44,7 @@ export function Success() {
             <ItemIcon icon="timer" cor={defaultTheme.yellow} />
             <p>
               Previsão de entrega{' '}
-              <b>
-                {getRandomInt(10, 20)} min - {getRandomInt(30, 60)} min
-              </b>
+              <b>20 min - 40 min</b>
             </p>
           </ItemOrderInfo>
           <ItemOrderInfo>

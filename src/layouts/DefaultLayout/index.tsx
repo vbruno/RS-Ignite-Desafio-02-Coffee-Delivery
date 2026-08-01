@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Navbar } from '../../components'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 
 export function DefaultLayout() {
   return (

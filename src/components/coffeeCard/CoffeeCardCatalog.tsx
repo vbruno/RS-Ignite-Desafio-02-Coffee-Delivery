@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { ButtonState, InputNumber } from '..'
 
-import { ICoffeeType, coffeeType, imgCoffee } from './coffeeType'
-import { ICoffee, OrderContext } from '../../context/OrderContext'
+import { coffeeType, imgCoffee } from './coffeeType'
+import { ICoffee, OrderContext } from '../../context/order-context'
 
 interface ICoffeeCardCatalogProps {
   type:
@@ -26,17 +26,9 @@ interface ICoffeeCardCatalogProps {
 
 export const CoffeeCardCatalog = ({ type }: ICoffeeCardCatalogProps) => {
   const [numberCoffee, setNumberCoffee] = useState(0)
-  const [coffee, setCoffee] = useState<ICoffeeType>()
+  const coffee = coffeeType.find((coffee) => coffee.type === type)
 
   const { setCart, setOrder } = useContext(OrderContext)
-
-  useEffect(() => {
-    if (numberCoffee < 0) setNumberCoffee(0)
-  }, [numberCoffee])
-
-  useEffect(() => {
-    setCoffee(coffeeType.find((coffee) => coffee.type === type) as ICoffeeType)
-  }, [type])
 
   function handleAddCoffee() {
     if (coffee === undefined) return

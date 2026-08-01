@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router'
 import { Home } from './pages'
 import { Checkout } from './pages/Checkout'
 import { Success } from './pages/Success'

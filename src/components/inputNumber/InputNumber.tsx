@@ -19,7 +19,7 @@ export const InputNumber = ({
   outValue,
 }: IInputNumberProps) => {
   const handleMinus = () => {
-    outValue((oldValue) => oldValue - 1)
+    outValue((oldValue) => Math.max(0, oldValue - 1))
   }
 
   const handlePlus = () => {

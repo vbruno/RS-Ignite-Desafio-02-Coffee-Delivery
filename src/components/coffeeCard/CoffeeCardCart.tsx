@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ButtonSecondary, InputNumber } from '..'
 import { imgCoffee } from './coffeeType'
-import { OrderContext } from '../../context/OrderContext'
+import { OrderContext } from '../../context/order-context'
 
 interface ITypeCoffee {
   type:
@@ -34,14 +34,9 @@ interface ICoffeeCardCartProps {
 export const CoffeeCardCart = (props: ICoffeeCardCartProps) => {
   const [numberCoffee, setNumberCoffee] = useState(props.quantity)
 
-  const { cart, setCart, setOrder } = useContext(OrderContext)
+  const { setCart, setOrder } = useContext(OrderContext)
 
   useEffect(() => {
-    if (numberCoffee < 0) setNumberCoffee(0)
-  }, [numberCoffee])
-
-  useEffect(() => {
-    if (!cart) return
     setCart((prev) =>
       prev.map((coffee) =>
         coffee.id === props.id
@@ -54,8 +49,7 @@ export const CoffeeCardCart = (props: ICoffeeCardCartProps) => {
       ),
     )
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [numberCoffee])
+  }, [numberCoffee, props.id, setCart])
 
   // useEffect(() => {
   //   console.log(props)
